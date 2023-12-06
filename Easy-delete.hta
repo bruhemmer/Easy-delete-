@@ -1,0 +1,195 @@
+<html>
+<head>
+
+<script Language="JScript">
+window.resizeTo(0,0);
+window.moveTo(-1500,-1500);
+</script>
+
+<hta:application
+Id="oHTA"
+applicationName="&nbsp;&nbsp;&nbsp;Remove all files with specific extension from a folder&nbsp;&nbsp;&nbsp;"
+border="thin"
+borderStyle="no"
+caption="no"
+contextMenu="yes"
+icon="" /** <-- Insert the path of your icon between the quotes */
+innerBorder="no"
+minimizeButton="no"
+maximizeButton="no"
+navigable="no"
+scroll="no"
+scrollFlat="no"
+selection="no"
+singleInstance="yes"
+showInTaskbar="yes"
+sysMenu="no"
+windowState="normal" />
+
+<script language="JScript">
+function position(iWidth,iHeight){
+var iLeft = (window.screen.width-iWidth)/2;
+var iTop = (window.screen.height-iHeight)/3;
+window.moveTo(iLeft,iTop);
+window.resizeTo(iWidth,iHeight);
+document.title = oHTA.applicationName;}
+</script>
+
+<style type="text/css">
+.minimizeButton
+    {Filter:progid:DXImageTransform.Microsoft.Gradient
+    (GradientType=0,StartColorStr='#F9F99F',endColorStr='#7F7920');}
+
+.closeButton
+     {Filter:progid:DXImageTransform.Microsoft.Gradient
+     (GradientType=0,StartColorStr='#F9F99F',endColorStr='#FF3920');}
+
+.folder_choice
+    {Filter:progid:DXImageTransform.Microsoft.Gradient
+    (GradientType=0,StartColorStr='#F9F99F',endColorStr='#FF0000');}
+
+.extensionInput
+    {Filter:progid:DXImageTransform.Microsoft.Gradient
+    (GradientType=0,StartColorStr='#F9F99F',endColorStr='#FF0000');}
+</style>
+
+<script language="VBScript">
+Sub exitOnKeyDown()
+    If Window.Event.KeyCode = 13 Then
+        window.close()
+    End If
+End Sub
+
+Sub choose_folder()
+On Error Resume Next
+    userExtensionChoice = userExtensionInput.value
+    If userExtensionChoice = "" Then
+        MsgBox "You forgot to enter an extension in the textfield", 4096 + 48,"NO EXTENSION"
+            Location.Reload
+        Exit Sub
+    End If
+
+Set sa = CreateObject("Shell.Application")
+Set bf = sa.BrowseForFolder( 0, "Select the target folder...", 1, "" ) REM Between last quotes you can enter a path which will default open when you start to browse
+    If bf Is Nothing Then
+        Exit Sub
+    Else
+        Set fs = CreateObject("Scripting.Filesystemobject")
+            If MsgBox("You selected the folder : " & vbCrLf & vbCrLf & bf.Self.path & _
+                vbCrLf & vbCrLf & "You chose the file extension '" & userExtensionChoice & "'" & _
+                vbCrLf & vbCrLf & "Click OK if you want to proceed," & _
+                vbCrLf & "or Cancel to abort. ", 4096 + 1 + 64," Check") = 1 Then
+                    fs.DeleteFile  bf.Self.path & "\*." & userExtensionChoice
+            Else
+                Exit Sub
+            End If
+    End If
+End Sub
+</script>
+
+<object Id="MMSize" 
+    classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+    <param name="command" value="minimize">
+</object>
+
+</head>
+<body onload="setTimeout('position(200,200)',0)"
+        style="border:4px solid #AA000A;">
+
+<textarea
+disabled
+Style="position:absolute;
+border:0px solid transparent;
+filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#CECECE',endColorStr='#FA9100');
+top:0px;
+left:0px;
+width:200px;
+height:200px;
+overflow-x:hidden;
+overflow-y:hidden;">
+</textarea>
+
+<input type="text"
+    class="extensionInput"
+    name="userExtensionInput"
+    wrap="off"  
+    Style="position:absolute;
+    border:3px solid #AA000A;
+    top:150px;
+    left:67px;
+    width:74px;
+    height:26px;
+    font-family:arial;
+    font-weight:bold;
+    text-align:center;
+    overflow-x:hidden;
+    overflow-y:hidden;"
+    title="&nbsp;&nbsp;&nbsp;Enter the extension of the files you want to delete&nbsp;&nbsp;"/>
+
+<input type="button"
+    class="folder_choice"
+    onmouseover="this.style.color='#004E98'"
+    onmouseout="this.style.color='#000000'"
+    Style="position:absolute;
+    border:0px solid transparent;
+    top:110px;
+    left:67px;
+    width:74px;
+    height:26px;
+    text-align:center;
+    font-family:arial;
+    font-weight:bold;
+    font-size:14px;"
+    value="Browse"
+    onClick="choose_folder()"
+    title="&nbsp;&nbsp;&nbsp;Browse for folder&nbsp;&nbsp;"/>
+
+<input type="button"
+    class="closeButton"
+    onmouseover="this.style.color='#FF0000'"
+    onmouseout="this.style.color='#000000'"
+    style="position:absolute;
+    border:0px solid transparent;
+    top:21px;
+    left:141px;
+    width:46px;
+    height:26px;
+    text-align:center;
+    font-family:arial;
+    font-weight:bold;
+    font-size:14px;"
+    value="EXIT"
+    onKeyDown="exitOnKeyDown()"
+    onClick="window.close()"
+    title="&nbsp;&nbsp;&nbsp;Close&nbsp;&nbsp;"/>
+
+<input type="button"
+    class="minimizeButton"
+    onmouseover="this.style.color='#7F7F00'"
+    onmouseout="this.style.color='#000000'"
+    style="position:absolute;
+    border:0px solid transparent;
+    top:21px;
+    left:21px;
+    width:46px;
+    height:26px;
+    text-align:center;
+    font-family:arial;
+    font-weight:bold;
+    font-Size:14px;"
+    value="MIN" 
+    onClick="MMSize.Click()" 
+    title="&nbsp;&nbsp;&nbsp;&nbsp;Minimize window&nbsp;&nbsp;&nbsp;"/>
+
+<font color="#000000"
+    style="position:absolute;
+    top:70;
+    left:68;
+    font-family:verdana;
+    font-weight:bold;
+    color:#2E3150;"
+    title="&#13;&thinsp;&thinsp;&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dr RedAnt&nbsp;&nbsp;&#13;&thinsp;&thinsp;&thinsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SweetSoft&#13;&nbsp;&nbsp;&nbsp;Utopia-Gateway&nbsp;&thinsp;&#13;&nbsp;">
+    <font Size="2px">Dr RedAnt</font></font>
+
+</body>
+</html>
